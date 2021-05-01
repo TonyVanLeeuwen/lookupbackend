@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -18,6 +15,7 @@ import javax.persistence.Table;
 public class User {
     @Id
     @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false, unique = true)
@@ -28,7 +26,7 @@ public class User {
     private String emailAdress;
 
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String passWord;
 
 }
