@@ -1,7 +1,7 @@
 package com.lookup.backend.lookupbackend.service;
 
 import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
-import com.lookup.backend.lookupbackend.model.User;
+import com.lookup.backend.lookupbackend.model.usermodel.User;
 import com.lookup.backend.lookupbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,10 +47,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    private User changeIdifExists(User user){
-//        if (userRepository.existsById(user.getId())){
-//            user.setId(user.getId() + 1);
-//            return user;
-//        } return user;
+//    public Optional<User> updateUser(Long userId, User user) {
+//        return userRepository.findById(userId)
+//                .map(existingUser -> {
+//                    userEntityMapper.updateUserEntity(existingUser, user);
+//                    return userEntityMapper.map(userRepository.save(existingUser));
+//                });
 //    }
 }
