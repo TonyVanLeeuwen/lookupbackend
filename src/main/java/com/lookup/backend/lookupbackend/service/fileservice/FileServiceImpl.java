@@ -1,7 +1,8 @@
-package com.lookup.backend.lookupbackend.service;
+package com.lookup.backend.lookupbackend.service.fileservice;
 
 import com.lookup.backend.lookupbackend.model.filemodel.FileModel;
 import com.lookup.backend.lookupbackend.repository.FileRepository;
+import com.lookup.backend.lookupbackend.service.fileservice.FileService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @NoArgsConstructor
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
 
     @Autowired
     private FileRepository fileRepository;

@@ -1,6 +1,6 @@
 package com.lookup.backend.lookupbackend.repository;
 
-import com.lookup.backend.lookupbackend.model.User;
+import com.lookup.backend.lookupbackend.model.usermodel.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

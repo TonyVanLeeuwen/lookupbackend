@@ -1,2 +1,5 @@
-package com.lookup.backend.lookupbackend.service.nearearthobjectservice;public interface NearEarthObjectService {
+package com.lookup.backend.lookupbackend.service.nearearthobjectservice;
+
+public interface NearEarthObjectService {
+
 }

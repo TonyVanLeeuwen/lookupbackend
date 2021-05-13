@@ -1,8 +1,7 @@
 package com.lookup.backend.lookupbackend.model.nearearthobjectmodel;
 
-public class NearEarthObjectTypes {
+public enum NearEarthObjectType {
 
-    public enum type{
         COMET,
         ASTEROID,
         PLANET,
@@ -13,5 +12,5 @@ public class NearEarthObjectTypes {
         METEOROID,
         METEORITE,
         METEOR,
-    }
+
 }

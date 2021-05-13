@@ -1,4 +1,4 @@
-package com.lookup.backend.lookupbackend.service;
+package com.lookup.backend.lookupbackend.service.userservice;
 
 import com.lookup.backend.lookupbackend.model.usermodel.User;
 

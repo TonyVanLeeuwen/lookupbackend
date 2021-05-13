@@ -1,4 +1,4 @@
-package com.lookup.backend.lookupbackend.service;
+package com.lookup.backend.lookupbackend.service.fileservice;
 
 import com.lookup.backend.lookupbackend.model.filemodel.FileModel;
 import org.springframework.web.multipart.MultipartFile;

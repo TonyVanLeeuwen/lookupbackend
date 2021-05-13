@@ -1,16 +1,18 @@
 package com.lookup.backend.lookupbackend.controller;
 
 
-import com.lookup.backend.lookupbackend.model.User;
-import com.lookup.backend.lookupbackend.service.UserService;
+import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
+import com.lookup.backend.lookupbackend.model.usermodel.User;
+import com.lookup.backend.lookupbackend.repository.UserRepository;
+import com.lookup.backend.lookupbackend.service.userservice.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @NoArgsConstructor
 @RestController
@@ -18,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping(value = "/helloworld")
     public String helloworld() {
@@ -39,6 +44,17 @@ public class UserController {
         userService.save(user);
         return new ResponseEntity<>("User added", HttpStatus.CREATED);
     }
+
+    @DeleteMapping(value = "/user/id/{id}")
+    public Map<String, Boolean> deleteUser(@PathVariable Long id) throws RecordNotFoundException {
+        userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("this user doesn't exist"));
+
+        userService.deleteById(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
+
 
 
 }
