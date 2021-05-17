@@ -22,6 +22,9 @@ public class Observation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
+    private String title;
+
     @JoinColumn(name = "fileModel_id")
     @OneToOne(fetch = FetchType.LAZY)
     private FileModel pictureDescription;

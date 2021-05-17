@@ -1,6 +1,10 @@
 package com.lookup.backend.lookupbackend.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
 import com.lookup.backend.lookupbackend.model.usermodel.User;
 import com.lookup.backend.lookupbackend.repository.UserRepository;
@@ -39,6 +43,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/user/observations/{id}")
+    public ResponseEntity<Object> getUserObservations(@PathVariable long id){
+        return new ResponseEntity<>(userService.getUserObservations(id), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/user")
     public ResponseEntity<Object> createUser(@RequestBody User user){
         userService.save(user);
@@ -47,14 +56,19 @@ public class UserController {
 
     @DeleteMapping(value = "/user/id/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable Long id) throws RecordNotFoundException {
-        userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("this user doesn't exist"));
-
         userService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
     }
 
-
-
+    @PatchMapping(path = "/user/id/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        try {
+            userService.updateUser(id, user);
+            return ResponseEntity.ok(user);
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
