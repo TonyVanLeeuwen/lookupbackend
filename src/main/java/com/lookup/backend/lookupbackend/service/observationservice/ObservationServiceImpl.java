@@ -14,7 +14,6 @@ public class ObservationServiceImpl implements ObservationService{
     @Autowired
     private ObservationRepository observationRepository;
 
-
     @Override
     public List<Observation> getAllObservations() {
         return observationRepository.findAll();
@@ -29,6 +28,14 @@ public class ObservationServiceImpl implements ObservationService{
         }
     }
 
+    @Override
+    public Long getVotes(Long id) {
+        if(observationRepository.existsById(id)){
+            return observationRepository.getOne(id).getVotes();
+        } else {
+            throw new RecordNotFoundException("Couldn't find observation with id " + id);
+        }
+    }
 
     @Override
     public Observation getObservationByNearEarthObject(Long nearEarthObjectID) {

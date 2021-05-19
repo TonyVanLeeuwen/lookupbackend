@@ -4,9 +4,11 @@ import com.lookup.backend.lookupbackend.model.authority.Authority;
 import com.lookup.backend.lookupbackend.model.observationmodel.Observation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     @Id
     @Column(nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +31,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Observation> observations;
 
-    @OneToMany(mappedBy = "username", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Authority> authorities = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false, updatable = false)})
+    private Set<Authority> authorities;
 
     @Column(nullable = false, unique = true)
     private String emailAdress;

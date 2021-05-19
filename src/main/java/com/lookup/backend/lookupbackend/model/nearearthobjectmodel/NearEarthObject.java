@@ -13,7 +13,6 @@ import java.util.List;
 @Table(name="nearearthobject")
 @NoArgsConstructor
 public class NearEarthObject {
-
     @Id
     @Column
     @Getter
@@ -24,6 +23,10 @@ public class NearEarthObject {
     @Enumerated(EnumType.STRING)
     @Column
     private NearEarthObjectType type;
+
+    public NearEarthObject(NearEarthObjectType nearEarthObjectType){
+        this.type = nearEarthObjectType;
+    }
 
     @OneToMany(mappedBy = "nearEarthObject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Observation> observations;

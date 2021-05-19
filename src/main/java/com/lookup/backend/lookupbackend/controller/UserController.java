@@ -1,11 +1,7 @@
 package com.lookup.backend.lookupbackend.controller;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
+import com.lookup.backend.lookupbackend.model.authority.Authority;
 import com.lookup.backend.lookupbackend.model.usermodel.User;
 import com.lookup.backend.lookupbackend.repository.UserRepository;
 import com.lookup.backend.lookupbackend.service.userservice.UserService;
@@ -33,17 +29,18 @@ public class UserController {
         return "Hello world";
     }
 
-    @GetMapping(value = "/user/id/{id}")
+    @GetMapping(value = "/users/user/id/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable("id") long id){
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/name/{name}")
+
+    @GetMapping(value = "/users/user/name/{name}")
     public ResponseEntity<Object> getUserByName(@PathVariable String name){
         return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/observations/{id}")
+    @GetMapping(value = "/users/user/observations/{id}")
     public ResponseEntity<Object> getUserObservations(@PathVariable long id){
         return new ResponseEntity<>(userService.getUserObservations(id), HttpStatus.OK);
     }
@@ -54,7 +51,7 @@ public class UserController {
         return new ResponseEntity<>("User added", HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/user/id/{id}")
+    @DeleteMapping(value = "/users/user/id/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable Long id) throws RecordNotFoundException {
         userService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
@@ -62,7 +59,7 @@ public class UserController {
         return response;
     }
 
-    @PatchMapping(path = "/user/id/{id}")
+    @PatchMapping(path = "/users/user/id/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
             userService.updateUser(id, user);
@@ -70,5 +67,22 @@ public class UserController {
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping(value = "/users/user/{id}/authorities")
+    public ResponseEntity<Object> getUserAuthorities(@PathVariable Long id){
+        return new ResponseEntity<>(userService.getAuthorities(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/users/user/{id}/authority")
+    public ResponseEntity<Object> addUserAuthorities(@PathVariable Long id, @RequestBody Authority authority){
+        userService.addAuthority(id, authority.getAuthority());
+        return new ResponseEntity<>("Authority added" ,HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/users/user/{id}/authority")
+    public ResponseEntity<Object> deleteUserAuthorities(@PathVariable Long id, @RequestBody Authority authority){
+        userService.removeAuthority(id, authority.getAuthority());
+        return new ResponseEntity<>("Authority removed", HttpStatus.OK);
     }
 }

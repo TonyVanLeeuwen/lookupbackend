@@ -19,9 +19,6 @@ public class ObservationController {
     @Autowired
     private ObservationService observationService;
 
-    @Autowired
-    private ObservationRepository observationRepository;
-
     @GetMapping(value = "/observation/id/{id}")
     public ResponseEntity<Object> getObservationById(@PathVariable long id){
         return new ResponseEntity<>(observationService.getObservationbyId(id), HttpStatus.OK);

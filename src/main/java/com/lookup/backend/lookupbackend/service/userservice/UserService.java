@@ -1,6 +1,5 @@
 package com.lookup.backend.lookupbackend.service.userservice;
 
-import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
 import com.lookup.backend.lookupbackend.model.authority.Authority;
 import com.lookup.backend.lookupbackend.model.observationmodel.Observation;
 import com.lookup.backend.lookupbackend.model.usermodel.User;
