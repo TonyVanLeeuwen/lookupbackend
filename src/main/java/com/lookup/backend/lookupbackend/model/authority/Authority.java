@@ -13,30 +13,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@IdClass(com.lookup.backend.lookupbackend.model.authority.Authoritykey.class)
-@Table(name = "authority")
+@IdClass(Authoritykey.class)
+@Table(name = "authorities")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Authority implements Serializable {
 
-    public Authority(String username, String authority){
-        this.username = username;
-        this.authority = authority;
-    }
-
     @Id
-    @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(nullable = false)
+    @Column
     private String username;
 
+    @Id
     @Column(nullable = false)
     private String authority;
 
-    @ManyToMany(mappedBy = "authorities")
-    private Set<User> user = new HashSet<>();
+
 }

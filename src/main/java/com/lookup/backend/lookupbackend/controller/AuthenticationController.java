@@ -1,8 +1,11 @@
 package com.lookup.backend.lookupbackend.controller;
 
+import com.lookup.backend.lookupbackend.model.authority.Authority;
+import com.lookup.backend.lookupbackend.model.usermodel.User;
 import com.lookup.backend.lookupbackend.payload.AuthenticationRequest;
 import com.lookup.backend.lookupbackend.payload.AuthenticationResponse;
 import com.lookup.backend.lookupbackend.service.userservice.UserDetailsServiceImpl;
+import com.lookup.backend.lookupbackend.service.userservice.UserServiceImpl;
 import com.lookup.backend.lookupbackend.utilities.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,9 @@ public class AuthenticationController {
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
+    private UserServiceImpl userService;
+
+    @Autowired
     JWTUtility jwtUtl;
 
     @GetMapping(value = "/authenticated")
@@ -33,10 +39,10 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestParam("username") String username, @RequestParam("password") String password) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
-//        String username = authenticationRequest.getUsername();
-//        String password = authenticationRequest.getPassword();
+        String username = authenticationRequest.getUsername();
+        String password = authenticationRequest.getPassword();
 
         try {
             authenticationManager.authenticate(
@@ -54,6 +60,4 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
-
-
 }

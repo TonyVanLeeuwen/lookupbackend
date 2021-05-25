@@ -29,19 +29,13 @@ public class UserController {
         return "Hello world";
     }
 
-    @GetMapping(value = "/users/user/id/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable("id") long id){
-        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
-    }
-
-
     @GetMapping(value = "/users/user/name/{name}")
     public ResponseEntity<Object> getUserByName(@PathVariable String name){
         return new ResponseEntity<>(userService.getUserByName(name), HttpStatus.OK);
     }
 
     @GetMapping(value = "/users/user/observations/{id}")
-    public ResponseEntity<Object> getUserObservations(@PathVariable long id){
+    public ResponseEntity<Object> getUserObservations(@PathVariable String id){
         return new ResponseEntity<>(userService.getUserObservations(id), HttpStatus.OK);
     }
 
@@ -52,7 +46,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/users/user/id/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable Long id) throws RecordNotFoundException {
+    public Map<String, Boolean> deleteUser(@PathVariable String id) throws RecordNotFoundException {
         userService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -60,7 +54,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "/users/user/id/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
         try {
             userService.updateUser(id, user);
             return ResponseEntity.ok(user);
@@ -70,18 +64,18 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/user/{id}/authorities")
-    public ResponseEntity<Object> getUserAuthorities(@PathVariable Long id){
+    public ResponseEntity<Object> getUserAuthorities(@PathVariable String id){
         return new ResponseEntity<>(userService.getAuthorities(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/users/user/{id}/authority")
-    public ResponseEntity<Object> addUserAuthorities(@PathVariable Long id, @RequestBody Authority authority){
+    public ResponseEntity<Object> addUserAuthorities(@PathVariable String id, @RequestBody Authority authority){
         userService.addAuthority(id, authority.getAuthority());
         return new ResponseEntity<>("Authority added" ,HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/users/user/{id}/authority")
-    public ResponseEntity<Object> deleteUserAuthorities(@PathVariable Long id, @RequestBody Authority authority){
+    public ResponseEntity<Object> deleteUserAuthorities(@PathVariable String id, @RequestBody Authority authority){
         userService.removeAuthority(id, authority.getAuthority());
         return new ResponseEntity<>("Authority removed", HttpStatus.OK);
     }

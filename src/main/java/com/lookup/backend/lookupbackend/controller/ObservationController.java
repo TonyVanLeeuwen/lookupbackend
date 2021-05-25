@@ -34,13 +34,13 @@ public class ObservationController {
         return new ResponseEntity<>(observationService.getObservationByNearEarthObject(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/observation")
+    @PostMapping(value = "/users/observation")
     public ResponseEntity<Object> createObservation(@RequestBody Observation observation){
         observationService.save(observation);
         return new ResponseEntity<>("Observation added", HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/observation/id/{id}")
+    @DeleteMapping(value = "/users/observation/id/{id}")
     public Map<String, Boolean> deleteObservation(@PathVariable Long id) {
         observationService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
@@ -48,7 +48,7 @@ public class ObservationController {
         return response;
     }
 
-    @PatchMapping(path = "/observation/id/{id}")
+    @PatchMapping(path = "/users/observation/id/{id}")
     public ResponseEntity<Observation> updateObservation(@PathVariable Long id, @RequestBody Observation observation){
         try {
             observationService.updateObservation(id, observation);

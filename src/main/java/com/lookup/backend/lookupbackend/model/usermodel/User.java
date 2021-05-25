@@ -19,29 +19,32 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User implements Serializable {
-    @Id
-    @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class User {
 
+    @Id
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Observation> observations;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false, updatable = false)})
-    private Set<Authority> authorities;
+    @Column(nullable = false)
+    private String passWord;
 
     @Column(nullable = false, unique = true)
     private String emailAdress;
 
-    @Column(nullable = false)
-    private String passWord;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    @JoinColumn(name = "userModel_id")
+    private List<Observation> observations;
+
+    @OneToMany(
+            targetEntity = Authority.class,
+            mappedBy = "username",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<Authority> authorities = new HashSet<>();
+
+    @Column(unique = true)
+    private String token;
 
     public Set<Authority> getAuthorities() {
         return authorities;
@@ -50,6 +53,7 @@ public class User implements Serializable {
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
+
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }

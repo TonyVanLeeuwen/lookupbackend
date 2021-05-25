@@ -19,21 +19,20 @@ public class NearEarthObjectController {
     @Autowired
     private NearEarthObjectService nearEarthObjectService;
 
-    @GetMapping(value = "/neo/get")
+    @GetMapping(value = "/admin/neo/get")
     public ResponseEntity<Object> getAllNeos(){
         return new ResponseEntity<>(nearEarthObjectService.getAllNearEarthObjects(), HttpStatus.OK);
     }
 
- @GetMapping(value= "/neo/get/{name}")
+ @GetMapping(value= "/admin/neo/get/{name}")
     public ResponseEntity<Object> getNEOByName(@PathVariable String name, @RequestBody NearEarthObjectType Type){
      return new ResponseEntity<>(nearEarthObjectService.getNearEarthObjectByType(Type), HttpStatus.OK);
  }
 
- @GetMapping(value= "/neo/get/{id}")
+ @GetMapping(value= "/admin/neo/get/{id}")
     public ResponseEntity<Object> getNeoById(@PathVariable long id){
      return new ResponseEntity<>(nearEarthObjectService.getNearEarthObjectById(id), HttpStatus.OK);
  }
-
 
 
 }

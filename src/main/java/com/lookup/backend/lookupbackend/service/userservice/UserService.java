@@ -10,14 +10,13 @@ import java.util.Set;
 public interface UserService {
 
     public List<User> getAllUsers();
-    public User getUser(long id);
     public User getUserByName(String name);
     public void save(User user);
-    public void deleteById(long id);
-    public void updateUser(Long userId, User user);
-    public List<Observation> getUserObservations(Long id);
-    public Set<Authority> getAuthorities(Long id);
-    public void addAuthority(Long id, String authorityToAdd);
-    public void removeAuthority(Long id, String authorityToRemove);
+    public void deleteById(String id);
+    public void updateUser(String userId, User user);
+    public List<Observation> getUserObservations(String id);
+    public Set<Authority> getAuthorities(String id);
+    public void addAuthority(String id, String authorityToAdd);
+    public void removeAuthority(String id, String authorityToRemove);
 
 }

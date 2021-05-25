@@ -1,6 +1,7 @@
 package com.lookup.backend.lookupbackend.config;
 
 import com.lookup.backend.lookupbackend.filter.JwtRequestFilter;
+import com.lookup.backend.lookupbackend.repository.UserRepository;
 import com.lookup.backend.lookupbackend.service.userservice.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     public UserDetailsServiceImpl customUserDetailsService;
 
     @Autowired
@@ -27,7 +31,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService);
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -45,20 +49,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/users/**").hasRole("USER")
+                .antMatchers("/users/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers(("/authenticated")).authenticated()
                 .antMatchers("/authenticate").permitAll()
                 .anyRequest().permitAll()
                 .and()
+                .cors()
+                .and()
+                .httpBasic()
+                .and()
+                .formLogin().disable()
+                .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 
     }
-
-
 }

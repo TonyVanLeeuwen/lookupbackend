@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,23 +18,33 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         User user = userRepository.findByName(userName);
         if (user == null) {
             throw new UsernameNotFoundException("User is not Found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getName(),
-                user.getPassWord(),
-                mapToAuthorities(user.getAuthorities()));
+        String password = user.getPassWord();
+        String encoded = passwordEncoder.encode(password);
+        user.setPassWord(encoded);
+
+        Set<Authority> authorities = user.getAuthorities();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (Authority authority: authorities) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getName(), password, grantedAuthorities);
     }
-    private Collection<? extends GrantedAuthority> mapToAuthorities(Set<Authority> roles) {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-                .collect(Collectors.toList());
-    }
+
 }

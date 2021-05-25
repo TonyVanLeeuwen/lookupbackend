@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
+
 @Table(name = "Observation")
 @Getter
 @Setter
@@ -33,8 +35,8 @@ public class Observation {
     @JoinColumn(name = "nearearthObject_id")
     private NearEarthObject nearEarthObject;
 
-    @ManyToOne
-    @JoinColumn(name = "userModel_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column
