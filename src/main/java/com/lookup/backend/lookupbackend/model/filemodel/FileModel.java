@@ -27,10 +27,9 @@ public class FileModel {
     @Column
     private Long size;
 
-    @OneToOne(mappedBy = "pictureDescription", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Observation observation;
-
     @Lob
     private byte[] data;
 
+    @OneToOne
+    private Observation observation;
 }

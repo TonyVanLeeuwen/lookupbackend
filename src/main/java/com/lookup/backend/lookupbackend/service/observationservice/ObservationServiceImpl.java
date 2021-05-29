@@ -4,9 +4,13 @@ import com.lookup.backend.lookupbackend.exception.RecordNotFoundException;
 import com.lookup.backend.lookupbackend.model.observationmodel.Observation;
 import com.lookup.backend.lookupbackend.repository.ObservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ObservationServiceImpl implements ObservationService{
@@ -20,11 +24,11 @@ public class ObservationServiceImpl implements ObservationService{
     }
 
     @Override
-    public Observation getObservationbyId(Long id) {
+    public ResponseEntity<Object> getObservationbyId(Long id) {
         if(observationRepository.existsById(id)){
-          return observationRepository.findById(id).get();
+          return new ResponseEntity<>(observationRepository.findById(id).get(), HttpStatus.OK);
         } else {
-            throw new RecordNotFoundException("couldn't find this observation");
+            return new ResponseEntity<>("This Observation could not be found", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -38,11 +42,20 @@ public class ObservationServiceImpl implements ObservationService{
     }
 
     @Override
-    public Observation getObservationByNearEarthObject(Long nearEarthObjectID) {
-        if (observationRepository.existsByNearEarthObject_Id(nearEarthObjectID)){
-            return getObservationByNearEarthObject(nearEarthObjectID);
+    public Set<Observation> getObservationByNearEarthObject(String nearEarthObjectID) {
+        if (observationRepository.existsByType(nearEarthObjectID)){
+            return observationRepository.getObservationByType(nearEarthObjectID);
         } else {
             throw new RecordNotFoundException("couldn't find this observation");
+        }
+    }
+
+    @Override
+    public List<Observation> getObservationsSortedByVotes(Boolean descending) {
+        if (descending){
+            return observationRepository.findAll(Sort.by(Sort.Direction.DESC, "votes"));
+        } else {
+            return observationRepository.findAll(Sort.by(Sort.Direction.ASC, "votes"));
         }
     }
 
@@ -64,7 +77,7 @@ public class ObservationServiceImpl implements ObservationService{
     public void updateObservation(Long observationId, Observation observation) {
         if (observationRepository.existsById(observationId)){
             Observation observationToPatch = observationRepository.getOne(observationId);
-            observationToPatch.setNearEarthObject(observation.getNearEarthObject());
+            observationToPatch.setType(observation.getType());
             observationToPatch.setPictureDescription(observation.getPictureDescription());
             observationToPatch.setVotes(observation.getVotes());
             observationToPatch.setTextDescription(observation.getTextDescription());

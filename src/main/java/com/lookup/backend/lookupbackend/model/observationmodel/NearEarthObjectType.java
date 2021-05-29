@@ -1,4 +1,4 @@
-package com.lookup.backend.lookupbackend.model.nearearthobjectmodel;
+package com.lookup.backend.lookupbackend.model.observationmodel;
 
 public enum NearEarthObjectType {
 

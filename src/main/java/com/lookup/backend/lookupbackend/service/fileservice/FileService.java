@@ -9,9 +9,8 @@ import java.util.Optional;
 
 public interface FileService {
 
-    public void save(MultipartFile file) throws IOException;
+    public FileModel save(MultipartFile file) throws IOException;
     public Optional<FileModel> getFile(String id);
     public List<FileModel> getAllFiles();
-
 
 }

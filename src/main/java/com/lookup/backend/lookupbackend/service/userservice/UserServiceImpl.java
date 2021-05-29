@@ -5,7 +5,10 @@ import com.lookup.backend.lookupbackend.model.authority.Authority;
 import com.lookup.backend.lookupbackend.model.observationmodel.Observation;
 import com.lookup.backend.lookupbackend.model.usermodel.User;
 import com.lookup.backend.lookupbackend.repository.UserRepository;
+import com.lookup.backend.lookupbackend.service.observationservice.ObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ObservationService observationService;
 
     @Autowired
     private UserRepository userRepository;
@@ -32,20 +38,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
-        User newUser = user;
-
-        newUser.setPassWord(passwordEncoder.encode(user.getPassWord()));
-
-        userRepository.save(newUser);
+    public ResponseEntity<Object> save(User user) throws Exception {
+        if (user.getPassWord() == null || user.getPassWord().equals("")){
+            return new ResponseEntity<>("Password cannot be null", HttpStatus.BAD_REQUEST);
+        } else if (user.getName() != null && !user.getName().equals("")){
+            user.setPassWord(passwordEncoder.encode(user.getPassWord()));
+            userRepository.save(user);
+            return new ResponseEntity<>("Succesfully added", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Username cannot be null", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
-    public void deleteById(String id) {
+    public ResponseEntity<String> deleteById(String id) {
         if (userRepository.existsByName(id)) {
             userRepository.deleteByName(id);
+            return new ResponseEntity<>("Succesfully deleted", HttpStatus.OK);
         } else {
-            throw new RecordNotFoundException("No user with id " + id);
+            return new ResponseEntity<>("Username cannot be null", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -63,11 +74,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Observation> getUserObservations(String id){
-        if (userRepository.existsByName(id)){
-            return userRepository.findByName(id).getObservations();
+    public Set<Observation> getObservations(String userId){
+        if (userRepository.existsByName(userId)){
+            User user = getUserByName(userId);
+
+            return user.getObservations();
         } else {
-            throw new RecordNotFoundException("Couldn't find a user with id" + id);
+            throw new RecordNotFoundException("Couldn't find a user with id" + userId);
         }
     }
 

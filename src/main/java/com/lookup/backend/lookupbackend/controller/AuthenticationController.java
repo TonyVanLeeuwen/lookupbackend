@@ -1,7 +1,6 @@
 package com.lookup.backend.lookupbackend.controller;
 
-import com.lookup.backend.lookupbackend.model.authority.Authority;
-import com.lookup.backend.lookupbackend.model.usermodel.User;
+
 import com.lookup.backend.lookupbackend.payload.AuthenticationRequest;
 import com.lookup.backend.lookupbackend.payload.AuthenticationResponse;
 import com.lookup.backend.lookupbackend.service.userservice.UserDetailsServiceImpl;
@@ -26,9 +25,6 @@ public class AuthenticationController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private UserServiceImpl userService;
 
     @Autowired
     JWTUtility jwtUtl;

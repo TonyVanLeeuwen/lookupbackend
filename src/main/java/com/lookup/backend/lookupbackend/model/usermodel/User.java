@@ -4,13 +4,10 @@ import com.lookup.backend.lookupbackend.model.authority.Authority;
 import com.lookup.backend.lookupbackend.model.observationmodel.Observation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -31,9 +28,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String emailAdress;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-//    @JoinColumn(name = "userModel_id")
-    private List<Observation> observations;
+    @OneToMany(targetEntity = Observation.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "userId")
+    private Set<Observation> observations = new HashSet<>();
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -46,9 +43,9 @@ public class User {
     @Column(unique = true)
     private String token;
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+    public Set<Authority> getAuthorities() {return authorities;}
+
+    public void addObservation(Observation observation){this.observations.add(observation);}
 
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);

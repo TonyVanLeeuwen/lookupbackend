@@ -20,20 +20,23 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileRepository fileRepository;
 
-    public void save(MultipartFile file) throws IOException {
+    @Override
+    public FileModel save(MultipartFile file) throws IOException {
         FileModel fileEntity = new FileModel();
         fileEntity.setName(StringUtils.cleanPath(file.getOriginalFilename()));
         fileEntity.setContentType(file.getContentType());
         fileEntity.setData(file.getBytes());
         fileEntity.setSize(file.getSize());
-
         fileRepository.save(fileEntity);
+        return fileEntity;
     }
 
+    @Override
     public Optional<FileModel> getFile(String id) {
         return fileRepository.findById(id);
     }
 
+    @Override
     public List<FileModel> getAllFiles() {
         return fileRepository.findAll();
     }

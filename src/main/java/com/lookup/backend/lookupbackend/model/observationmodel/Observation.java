@@ -1,18 +1,13 @@
 package com.lookup.backend.lookupbackend.model.observationmodel;
 
-
 import com.lookup.backend.lookupbackend.model.filemodel.FileModel;
-import com.lookup.backend.lookupbackend.model.nearearthobjectmodel.NearEarthObject;
-import com.lookup.backend.lookupbackend.model.usermodel.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-
 @Table(name = "Observation")
 @Getter
 @Setter
@@ -27,17 +22,15 @@ public class Observation {
     @Column(nullable = false)
     private String title;
 
-    @JoinColumn(name = "fileModel_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "observation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private FileModel pictureDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "nearearthObject_id")
-    private NearEarthObject nearEarthObject;
+    @Column(unique = true)
+    private String pictureDescriptionURL;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private NearEarthObjectType type;
 
     @Column
     private String textDescription;
@@ -45,4 +38,7 @@ public class Observation {
     @Column
     private long votes;
 
+    public void addFile(FileModel fileModel){
+        this.pictureDescription = fileModel;
+    }
 }
